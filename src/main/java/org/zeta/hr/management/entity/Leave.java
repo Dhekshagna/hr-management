@@ -1,19 +1,27 @@
 package org.zeta.hr.management.entity;
 
+import org.zeta.hr.management.enums.LeaveStatus;
+import org.zeta.hr.management.enums.LeaveType;
+
 import java.time.LocalDate;
 
 public class Leave {
     public int leaveId;
     public int employeeId;
-    public String leaveType;
-    public LocalDate startDate, endDate;
-    public String status = "APPLIED";
+    public LeaveType leaveType;
+    public LocalDate startDate;
+    public LocalDate endDate;
+    public LeaveStatus status;
+    public String reason;
 
-    public Leave(int employeeId, String leaveType, LocalDate startDate, LocalDate endDate) {
+    public Leave (int leaveId, int employeeId, LeaveType leaveType, LocalDate startDate, LocalDate endDate, LeaveStatus status, String reason) {
+        this.leaveId = leaveId;
         this.employeeId = employeeId;
         this.leaveType = leaveType;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.status = status;
+        this.reason = reason;
     }
 
     public int getLeaveId () {
@@ -32,11 +40,11 @@ public class Leave {
         this.employeeId = employeeId;
     }
 
-    public String getLeaveType () {
+    public LeaveType getLeaveType () {
         return leaveType;
     }
 
-    public void setLeaveType (String leaveType) {
+    public void setLeaveType (LeaveType leaveType) {
         this.leaveType = leaveType;
     }
 
@@ -56,12 +64,35 @@ public class Leave {
         this.endDate = endDate;
     }
 
-    public String getStatus () {
+    public LeaveStatus getStatus () {
         return status;
     }
 
-    public void setStatus (String status) {
+    public void setStatus (LeaveStatus status) {
         this.status = status;
+    }
+
+    public String getReason () {
+        return reason;
+    }
+
+    public void setReason (String reason) {
+        this.reason = reason;
+        }
+
+    @Override
+    public String toString() {
+        return String.format("""
+        📝 Leave ID: %d
+        👤 Employee ID: %d
+        🏷️ Type: %s
+        📅 Start: %s
+        📅 End: %s
+        🔖 Status: %s
+        💬 Reason: %s
+        """,
+            leaveId, employeeId, leaveType, startDate, endDate, status, reason
+        );
     }
 }
 

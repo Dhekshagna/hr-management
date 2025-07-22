@@ -10,10 +10,8 @@ public class Employee {
     private int leaveBalance = 22;
     private int sickLeaves = 12;
     private int paidLeaves = 10;
-    private String contact;
     private String emailId;
     private String phone;
-    private String address;
     private String city;
     private String locality;
     private String state;
@@ -22,17 +20,14 @@ public class Employee {
     public Employee () {}
 
     public Employee(String firstName, String lastName, String role, int reportsTo,
-                    String contact, String emailId, String phone,
-                    String address, String city, String locality, String state, String pinCode) {
+                    String emailId, String phone, String city, String locality, String state, String pinCode) {
         this.id = counter++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.reportsTo = reportsTo;
-        this.contact = contact;
         this.emailId = emailId;
         this.phone = phone;
-        this.address = address;
         this.city = city;
         this.locality = locality;
         this.state = state;
@@ -111,14 +106,6 @@ public class Employee {
         this.paidLeaves = paidLeaves;
     }
 
-    public String getContact () {
-        return contact;
-    }
-
-    public void setContact (String contact) {
-        this.contact = contact;
-    }
-
     public String getEmailId () {
         return emailId;
     }
@@ -133,14 +120,6 @@ public class Employee {
 
     public void setPhone (String phone) {
         this.phone = phone;
-    }
-
-    public String getAddress () {
-        return address;
-    }
-
-    public void setAddress (String address) {
-        this.address = address;
     }
 
     public String getCity () {
@@ -176,10 +155,19 @@ public class Employee {
     }
 
     @Override
-    public String toString () {
-        return id + " | " + firstName + " " + lastName + " | " + role + " | " + reportsTo +
-               " | " + contact + " | " + emailId + " | " + phone +
-               " | " + address + ", " + locality + ", " + city +
-               ", " + state + ", " + pinCode;
+    public String toString() {
+        return String.format("""
+        👤 Employee Details:
+           Employee ID: %d
+           Name: %s %s
+           Role: %s
+           Reports To: %d
+        📞 Contact Details;
+           Email: %s
+           Phone: %s
+        🏠 Address: %s, %s, %s, %s
+        """,
+            id, firstName, lastName, role, reportsTo, emailId, phone, locality, city, state, pinCode
+        );
     }
 }
