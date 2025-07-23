@@ -2,19 +2,31 @@ package org.zeta.hr.management.constants;
 
 public class EmployeeConstants {
   public static final String INSERT_EMPLOYEE =
-      "INSERT INTO employee (id, first_name, last_name, role, reports_to, leave_balance, sick_leaves, paid_leaves, email_id, phone, city, locality, state, pin_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//HR
-  public static final String SELECT_EMPLOYEE_BY_ID = "SELECT * FROM employee WHERE id = ?";//Employee
+      "INSERT INTO employee (id, first_name, last_name, role, reports_to, leave_balance,"
+          + " sick_leaves, paid_leaves, email_id, phone, city, locality, state, pin_code) VALUES"
+          + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // HR
+  public static final String SELECT_EMPLOYEE_BY_ID =
+      "SELECT * FROM employee WHERE id = ?"; // Employee
   public static final String UPDATE_EMPLOYEE =
-      "UPDATE employee SET first_name = ?, last_name = ?, role = ?, reports_to = ?, leave_balance = ?, sick_leaves = ?, paid_leaves = ?, email_id = ?, phone = ?, city = ?, locality = ?, state = ?, pin_code = ? WHERE id = ?";//HR and Employee
-  public static final String DELETE_EMPLOYEE = "DELETE FROM employee WHERE id = ?";//HR
-  public static final String SELECT_ALL_EMPLOYEES = "SELECT * FROM employee";//HR
+      "UPDATE employee SET first_name = ?, last_name = ?, role = ?, reports_to = ?, leave_balance ="
+          + " ?, sick_leaves = ?, paid_leaves = ?, email_id = ?, phone = ?, city = ?, locality = ?,"
+          + " state = ?, pin_code = ? WHERE id = ?"; // HR and Employee
+  public static final String DELETE_EMPLOYEE = "DELETE FROM employee WHERE id = ?"; // HR
+  public static final String SELECT_ALL_EMPLOYEES = "SELECT * FROM employee"; // HR
   public static final String SELECT_EMPLOYEE_BY_REPORTS_TO =
-      "SELECT * FROM employee WHERE reports_to = ?";//Manager
+      "SELECT * FROM employee WHERE reports_to = ?"; // Manager
   public static final String UPDATE_EMPLOYEE_REPORTS_TO =
-      "UPDATE employee SET reports_to = ? WHERE id = ?";//HR
+      "UPDATE employee SET reports_to = ? WHERE id = ?"; // HR
   public static final String UPDATE_EMPLOYEE_LEAVE_BALANCE_SICK =
-      "UPDATE employee SET sick_leaves = sick_leaves - ?, leave_balance = leave_balance - ? WHERE id = ?";//internal usage
+      "UPDATE employee SET sick_leaves = ?, leave_balance = ? WHERE" + " id = ?"; // internal usage
   public static final String UPDATE_EMPLOYEE_LEAVE_BALANCE_PAID =
-        "UPDATE employee SET paid_leaves = paid_leaves - ?, leave_balance = leave_balance - ? WHERE id = ?";//internal usage
-
+      "UPDATE employee SET paid_leaves = ?, leave_balance = ? WHERE" + " id = ?"; // internal usage
+  public static final String COUNT_ROWS_INSERTED =
+      "SELECT COUNT(*) FROM employee"; // internal usage
+  public static final String INSERT_CEO_IF_NOT_EXISTS =
+      "INSERT INTO employee (id, first_name, last_name, role, reports_to, leave_balance,"
+          + " sick_leaves, paid_leaves, email_id, phone, city, locality, state, pin_code)"
+          + " SELECT 0, 'John', 'Doe', 'CEO', -1, 22, 12, 10,"
+          + " 'ceo@company.com', '1234567890', 'Metropolis', 'Central', 'Delhi', '900010'"
+          + " WHERE NOT EXISTS (SELECT 1 FROM employee WHERE id = 0)";
 }
