@@ -15,6 +15,7 @@ public class EmployeeDAO {
 
   public EmployeeDAO() {
     insertCEO();
+    insertHR();
   }
 
   public boolean insertEmployee(Employee employee) {
@@ -155,6 +156,140 @@ public class EmployeeDAO {
     return rowsUpdated == 1;
   }
 
+  public boolean updateEmployeeReportsTo(int employeeId, int reportsTo) {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    int rowsUpdated = 0;
+    try {
+      connection = DatabaseConnection.getConnection();
+      preparedStatement = connection.prepareStatement(EmployeeConstants.UPDATE_EMPLOYEE_REPORTS_TO);
+      preparedStatement.setInt(1, reportsTo);
+      preparedStatement.setInt(2, employeeId);
+      rowsUpdated = preparedStatement.executeUpdate();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      DatabaseConnection.closeStatement(preparedStatement);
+      DatabaseConnection.closeConnection(connection);
+    }
+    return rowsUpdated == 1;
+  }
+
+  public List<Employee> getAllManagers() {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+    List<Employee> managers = new ArrayList<>();
+    try {
+      connection = DatabaseConnection.getConnection();
+      preparedStatement =
+          connection.prepareStatement(EmployeeConstants.SELECT_EMPLOYEE_BY_ROLE_MANAGER);
+      resultSet = preparedStatement.executeQuery();
+      while (resultSet.next()) {
+        Employee manager =
+            new Employee(
+                resultSet.getString("first_name"),
+                resultSet.getString("last_name"),
+                EmployeeRole.valueOf(resultSet.getString("role")),
+                resultSet.getInt("reports_to"),
+                resultSet.getString("email_id"),
+                resultSet.getString("phone"),
+                resultSet.getString("city"),
+                resultSet.getString("locality"),
+                resultSet.getString("state"),
+                resultSet.getString("pin_code"));
+        manager.setId(resultSet.getInt("id"));
+        manager.setLeaveBalance(resultSet.getInt("leave_balance"));
+        manager.setSickLeaves(resultSet.getInt("sick_leaves"));
+        manager.setPaidLeaves(resultSet.getInt("paid_leaves"));
+        managers.add(manager);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      DatabaseConnection.closeResultSet(resultSet);
+      DatabaseConnection.closeStatement(preparedStatement);
+      DatabaseConnection.closeConnection(connection);
+    }
+    return managers;
+  }
+
+  public Employee getEmployeeByEmail(String email) {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+    Employee employee = null;
+    try {
+      connection = DatabaseConnection.getConnection();
+      preparedStatement = connection.prepareStatement(EmployeeConstants.SELECT_EMPLOYEE_BY_EMAIL);
+      preparedStatement.setString(1, email);
+      resultSet = preparedStatement.executeQuery();
+      if (resultSet.next()) {
+        employee =
+            new Employee(
+                resultSet.getString("first_name"),
+                resultSet.getString("last_name"),
+                EmployeeRole.valueOf(resultSet.getString("role")),
+                resultSet.getInt("reports_to"),
+                resultSet.getString("email_id"),
+                resultSet.getString("phone"),
+                resultSet.getString("city"),
+                resultSet.getString("locality"),
+                resultSet.getString("state"),
+                resultSet.getString("pin_code"));
+        employee.setId(resultSet.getInt("id"));
+        employee.setLeaveBalance(resultSet.getInt("leave_balance"));
+        employee.setSickLeaves(resultSet.getInt("sick_leaves"));
+        employee.setPaidLeaves(resultSet.getInt("paid_leaves"));
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      DatabaseConnection.closeResultSet(resultSet);
+      DatabaseConnection.closeStatement(preparedStatement);
+      DatabaseConnection.closeConnection(connection);
+    }
+    return employee;
+  }
+
+  public Employee getEmployeeByPhone(String phone) {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+    Employee employee = null;
+    try {
+      connection = DatabaseConnection.getConnection();
+      preparedStatement = connection.prepareStatement(EmployeeConstants.SELECT_EMPLOYEE_BY_PHONE);
+      preparedStatement.setString(1, phone);
+      resultSet = preparedStatement.executeQuery();
+      if (resultSet.next()) {
+        employee =
+            new Employee(
+                resultSet.getString("first_name"),
+                resultSet.getString("last_name"),
+                EmployeeRole.valueOf(resultSet.getString("role")),
+                resultSet.getInt("reports_to"),
+                resultSet.getString("email_id"),
+                resultSet.getString("phone"),
+                resultSet.getString("city"),
+                resultSet.getString("locality"),
+                resultSet.getString("state"),
+                resultSet.getString("pin_code"));
+        employee.setId(resultSet.getInt("id"));
+        employee.setLeaveBalance(resultSet.getInt("leave_balance"));
+        employee.setSickLeaves(resultSet.getInt("sick_leaves"));
+        employee.setPaidLeaves(resultSet.getInt("paid_leaves"));
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      DatabaseConnection.closeResultSet(resultSet);
+      DatabaseConnection.closeStatement(preparedStatement);
+      DatabaseConnection.closeConnection(connection);
+    }
+    return employee;
+  }
+
   public boolean deleteEmployee(int id) {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
@@ -180,7 +315,8 @@ public class EmployeeDAO {
     List<Employee> employees = new ArrayList<>();
     try {
       connection = DatabaseConnection.getConnection();
-      preparedStatement = connection.prepareStatement(EmployeeConstants.UPDATE_EMPLOYEE_REPORTS_TO);
+      preparedStatement =
+          connection.prepareStatement(EmployeeConstants.SELECT_EMPLOYEE_BY_REPORTS_TO);
       preparedStatement.setInt(1, managerId);
       resultSet = preparedStatement.executeQuery();
       while (resultSet.next()) {
@@ -284,6 +420,21 @@ public class EmployeeDAO {
     try {
       connection = DatabaseConnection.getConnection();
       preparedStatement = connection.prepareStatement(EmployeeConstants.INSERT_CEO_IF_NOT_EXISTS);
+      preparedStatement.executeUpdate();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      DatabaseConnection.closeStatement(preparedStatement);
+      DatabaseConnection.closeConnection(connection);
+    }
+  }
+
+  public void insertHR() {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    try {
+      connection = DatabaseConnection.getConnection();
+      preparedStatement = connection.prepareStatement(EmployeeConstants.INSERT_HR_IF_NOT_EXISTS);
       preparedStatement.executeUpdate();
     } catch (Exception e) {
       e.printStackTrace();

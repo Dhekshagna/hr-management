@@ -1,6 +1,5 @@
 package org.zeta.hr.management.service.impl;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.zeta.hr.management.dao.EmployeeDAO;
@@ -46,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
       int id,
       String firstName,
       String lastName,
-      String role,
+      EmployeeRole role,
       int reportsTo,
       String emailId,
       String phone,
@@ -58,36 +57,123 @@ public class EmployeeServiceImpl implements EmployeeService {
     if (employee == null) {
       throw new ResourceNotFoundException("Employee not found with ID: " + id);
     }
+    employee.setFirstName(firstName);
+    employee.setLastName(lastName);
+    employee.setRole(role);
+    employee.setReportsTo(reportsTo);
+    employee.setEmailId(emailId);
+    employee.setPhone(phone);
+    employee.setCity(city);
+    employee.setLocality(locality);
+    employee.setState(state);
+    employee.setPinCode(pinCode);
+    employeeDAO.updateEmployee(employee);
+    System.out.println("Employee updated successfully with ID: " + id);
   }
 
   @Override
   public void deleteEmployee(int id) {
-    // Implementation for deleting an employee
-  }
-
-  @Override
-  public void viewEmployee(int id) {
     Employee employee = employeeDAO.getEmployeeById(id);
+    if (employee == null) {
+      throw new ResourceNotFoundException("Employee not found with ID: " + id);
+    }
+    employeeDAO.deleteEmployee(id);
   }
 
   @Override
-  public void viewAllEmployees() {
-    // Implementation for viewing all employees
+  public Employee viewEmployee(int id) {
+    Employee employee = employeeDAO.getEmployeeById(id);
+    if (employee == null) {
+      throw new ResourceNotFoundException("Employee not found with ID: " + id);
+    }
+    return employee;
+  }
+
+  @Override
+  public List<Employee> viewAllEmployees() {
+    List<Employee> employees = employeeDAO.getAllEmployees();
+    if (employees.isEmpty()) {
+      throw new ResourceNotFoundException("No employees found in the system.");
+    }
+    return employees;
   }
 
   @Override
   public List<Employee> getEmployeesByManager(int managerId) {
-    // Implementation for getting employees by manager
-    return null; // Placeholder return
+    List<Employee> employees = employeeDAO.getEmployeesByManagerId(managerId);
+    if (employees.isEmpty()) {
+      throw new ResourceNotFoundException("No employees found for manager with ID: " + managerId);
+    }
+    return employees;
   }
 
   @Override
-  public void updateLeaveBalanceSick(int id, LocalDate startDate, LocalDate endDate) {
-    // Implementation for updating sick leave balance
+  public void updateLeaveBalanceSick(int id, int days) {
+
+    if (days < 0) {
+      throw new IllegalArgumentException("End date cannot be before start date.");
+    }
+
+    Employee employee = employeeDAO.getEmployeeById(id);
+
+    employeeDAO.updateEmployeeLeaveBalanceSick(
+        id, employee.getSickLeaves() - days, employee.getLeaveBalance() - days);
   }
 
   @Override
-  public void updateLeaveBalancePaid(int id, LocalDate startDate, LocalDate endDate) {
-    // Implementation for updating paid leave balance
+  public void updateLeaveBalancePaid(int id, int days) {
+    if (days < 0) {
+      throw new IllegalArgumentException("End date cannot be before start date.");
+    }
+
+    Employee employee = employeeDAO.getEmployeeById(id);
+
+    employeeDAO.updateEmployeeLeaveBalancePaid(
+        id, employee.getPaidLeaves() - days, employee.getLeaveBalance() - days);
+  }
+
+  @Override
+  public void updateEmployeeReportsTo(int id, int newManagerId) {
+    Employee employee = employeeDAO.getEmployeeById(id);
+    if (employee == null) {
+      throw new ResourceNotFoundException("Employee not found with ID: " + id);
+    }
+    Employee newManager = employeeDAO.getEmployeeById(newManagerId);
+    if (newManager == null) {
+      throw new ResourceNotFoundException("New manager not found with ID: " + newManagerId);
+    }
+    if (!newManager.getRole().equals(EmployeeRole.MANAGER)
+        && !newManager.getRole().equals(EmployeeRole.CEO)) {
+      throw new ResourceNotFoundException("New manager must be a Manager or CEO.");
+    }
+    employee.setReportsTo(newManagerId);
+    employeeDAO.updateEmployeeReportsTo(id, newManagerId);
+  }
+
+  @Override
+  public List<Employee> getAllManagers() {
+    List<Employee> managers = employeeDAO.getAllManagers();
+    if (managers.isEmpty()) {
+      throw new ResourceNotFoundException("No managers found in the system.");
+    }
+    return managers;
+  }
+
+  @Override
+  public Employee getEmployeeByEmailId(String emailId) {
+    Employee employee = employeeDAO.getEmployeeByEmail(emailId);
+    if (employee == null) {
+      throw new ResourceNotFoundException("Employee not found with email: " + emailId);
+    }
+    return employee;
+  }
+
+  @Override
+  public Employee getEmployeeByPhone(String phone) {
+    Employee employee = employeeDAO.getEmployeeByPhone(phone);
+    if (employee == null) {
+      throw new ResourceNotFoundException("Employee not found with phone: " + phone);
+    }
+    return employee;
   }
 }

@@ -1,6 +1,5 @@
 package org.zeta.hr.management.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.zeta.hr.management.entity.Employee;
@@ -23,7 +22,7 @@ public interface EmployeeService {
       int id,
       String firstName,
       String lastName,
-      String role,
+      EmployeeRole role,
       int reportsTo,
       String emailId,
       String phone,
@@ -34,13 +33,21 @@ public interface EmployeeService {
 
   public void deleteEmployee(int id);
 
-  public void viewEmployee(int id);
+  public Employee viewEmployee(int id);
 
-  public void viewAllEmployees();
+  public List<Employee> viewAllEmployees();
 
   public List<Employee> getEmployeesByManager(int managerId);
 
-  public void updateLeaveBalanceSick(int id, LocalDate startDate, LocalDate endDate);
+  public void updateLeaveBalanceSick(int id, int days);
 
-  public void updateLeaveBalancePaid(int id, LocalDate startDate, LocalDate endDate);
+  public void updateLeaveBalancePaid(int id, int days);
+
+  public void updateEmployeeReportsTo(int id, int newManagerId);
+
+  public List<Employee> getAllManagers();
+
+  public Employee getEmployeeByEmailId(String emailId);
+
+  public Employee getEmployeeByPhone(String phone);
 }

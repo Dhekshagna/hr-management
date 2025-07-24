@@ -1,6 +1,7 @@
 package org.zeta.hr.management.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import org.zeta.hr.management.utils.DatabaseConnection;
 
 public class LeaveDAO {
   public boolean applyLeave(
-      int employeeId, String leaveType, String startDate, String endDate, String reason) {
+      int employeeId, LeaveType leaveType, String startDate, String endDate, String reason) {
     Connection connection = null;
     ResultSet resultSet = null;
     PreparedStatement preparedStatement = null;
@@ -23,9 +24,9 @@ public class LeaveDAO {
       connection = DatabaseConnection.getConnection();
       preparedStatement = connection.prepareStatement(LeaveConstants.INSERT_LEAVE);
       preparedStatement.setInt(1, employeeId);
-      preparedStatement.setString(2, leaveType);
-      preparedStatement.setString(3, startDate);
-      preparedStatement.setString(4, endDate);
+      preparedStatement.setString(2, leaveType.toString());
+      preparedStatement.setDate(3, Date.valueOf(startDate));
+      preparedStatement.setDate(4, Date.valueOf(endDate));
       preparedStatement.setString(5, reason);
       rowsInserted = preparedStatement.executeUpdate();
     } catch (Exception e) {
@@ -35,17 +36,17 @@ public class LeaveDAO {
       DatabaseConnection.closeStatement(preparedStatement);
       DatabaseConnection.closeConnection(connection);
     }
-    return rowsInserted == 0;
+    return rowsInserted == 1;
   }
 
-  public boolean updateLeaveStatus(int leaveId, String status) {
+  public boolean updateLeaveStatus(int leaveId, LeaveStatus status) {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     int rowsUpdated = 0;
     try {
       connection = DatabaseConnection.getConnection();
       preparedStatement = connection.prepareStatement(LeaveConstants.UPDATE_LEAVE_STATUS_QUERY);
-      preparedStatement.setString(1, status);
+      preparedStatement.setString(1, status.toString());
       preparedStatement.setInt(2, leaveId);
       rowsUpdated = preparedStatement.executeUpdate();
     } catch (Exception e) {
@@ -84,6 +85,10 @@ public class LeaveDAO {
       }
     } catch (Exception e) {
       e.printStackTrace();
+    } finally {
+      DatabaseConnection.closeResultSet(resultSet);
+      DatabaseConnection.closeStatement(preparedStatement);
+      DatabaseConnection.closeConnection(connection);
     }
     return leave;
   }
@@ -122,7 +127,7 @@ public class LeaveDAO {
   }
 
   // get all leaves under an employee (manager)
-  public List<Leave> getEmployeeLeaves() {
+  public List<Leave> getLeavesUnderManager(int managerId) {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -131,6 +136,7 @@ public class LeaveDAO {
       connection = DatabaseConnection.getConnection();
       preparedStatement =
           connection.prepareStatement(LeaveConstants.SELECT_LEAVES_BY_UNDER_AN_EMPLOYEE_QUERY);
+      preparedStatement.setInt(1, managerId);
       resultSet = preparedStatement.executeQuery();
       while (resultSet.next()) {
         leaves.add(
@@ -154,7 +160,7 @@ public class LeaveDAO {
   }
 
   // get all leaves under an employee (manager) with pending status
-  public List<Leave> getLeavesByStatus(LeaveStatus status) {
+  public List<Leave> getLeavesByStatus(int managerId) {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -164,7 +170,7 @@ public class LeaveDAO {
       preparedStatement =
           connection.prepareStatement(
               LeaveConstants.SELECT_LEAVES_BY_UNDER_AN_EMPLOYEE_QUERY_PENDING_STATUS);
-      preparedStatement.setString(1, status.name());
+      preparedStatement.setInt(1, managerId);
       resultSet = preparedStatement.executeQuery();
       while (resultSet.next()) {
         leaves.add(

@@ -1,18 +1,24 @@
 package org.zeta.hr.management.service;
 
+import java.util.List;
+
+import org.zeta.hr.management.entity.Leave;
+import org.zeta.hr.management.enums.LeaveStatus;
+import org.zeta.hr.management.enums.LeaveType;
+
 public interface LeaveService {
   void applyLeave(
-      int employeeId, String leaveType, String startDate, String endDate, String reason);
+      int employeeId, LeaveType leaveType, String startDate, String endDate, String reason);
 
-  void updateLeaveStatus(int leaveId, String status);
+  void updateLeaveStatus(int leaveId, LeaveStatus status, int managerId);
 
-  void cancelLeave(int leaveId);
+  void cancelLeave(int leaveId, int employeeId);
 
-  void viewLeaveDetails(int leaveId, String employeeId);
+  Leave viewLeaveDetails(int leaveId, int employeeId);
 
-  void viewLeavesByEmployee(String employeeId);
+  List<Leave> viewLeavesByEmployee(int employeeId);
 
-  void viewLeavesUnderManager(String managerId);
+  List<Leave> viewLeavesUnderManager(int managerId);
 
-  void viewPendingLeavesUnderManager(String managerId);
+  List<Leave> viewPendingLeavesUnderManager(int managerId);
 }
