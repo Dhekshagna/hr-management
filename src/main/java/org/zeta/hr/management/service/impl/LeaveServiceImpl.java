@@ -31,10 +31,6 @@ public class LeaveServiceImpl implements LeaveService {
   @Override
   public void updateLeaveStatus(int leaveId, LeaveStatus status, int managerId) {
 
-    for (Leave leave : viewPendingLeavesUnderManager(managerId)) {
-      System.out.println(leave);
-      System.out.println("--------------------------------------------------");
-    }
     Leave leave = leaveDAO.getLeaveById(leaveId, managerId);
     Employee employee = employeeService.viewEmployee(leave.getEmployeeId());
 
@@ -64,7 +60,6 @@ public class LeaveServiceImpl implements LeaveService {
           System.out.println(
               "Leave rejected successfully for Employee ID: " + leave.getEmployeeId());
         }
-        System.out.println("Leave status updated successfully.");
       } else {
         System.out.println("Failed to update leave status. Please try again.");
       }

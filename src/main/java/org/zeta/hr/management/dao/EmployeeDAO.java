@@ -316,7 +316,7 @@ public class EmployeeDAO {
     try {
       connection = DatabaseConnection.getConnection();
       preparedStatement =
-          connection.prepareStatement(EmployeeConstants.SELECT_EMPLOYEE_BY_REPORTS_TO);
+          connection.prepareStatement(EmployeeConstants.SELECT_EMPLOYEE_BY_REPORTS_TO_ALL_COLUMNS);
       preparedStatement.setInt(1, managerId);
       resultSet = preparedStatement.executeQuery();
       while (resultSet.next()) {

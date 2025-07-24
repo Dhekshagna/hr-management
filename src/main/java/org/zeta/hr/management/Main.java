@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import org.zeta.hr.management.entity.Employee;
 import org.zeta.hr.management.enums.EmployeeRole;
+import org.zeta.hr.management.exception.ResourceNotFoundException;
 import org.zeta.hr.management.presentation.EngineerPresentation;
 import org.zeta.hr.management.presentation.HRPresentation;
 import org.zeta.hr.management.presentation.ManagerPresentation;
@@ -17,6 +18,8 @@ public class Main {
     System.out.println("\033[1;37m 1. Login using email\033[0m");
     System.out.println("\033[1;37m 2. Login using phone number\033[0m");
     System.out.println("\033[1;37m 3. Exit\033[0m");
+
+    System.out.print("\033[1;34m Please select an option (1-3): \033[0m");
 
     int choice = scanner.nextInt();
 
@@ -58,7 +61,13 @@ public class Main {
     System.out.print("\033[1;37m Enter Email: \033[0m");
     String email = scanner.next();
 
-    Employee employee = employeeService.getEmployeeByEmailId(email);
+    Employee employee;
+    try {
+      employee = employeeService.getEmployeeByEmailId (email);
+    } catch (ResourceNotFoundException e) {
+      System.out.println("\033[1;31m " + e.getMessage() + "\033[0m");
+      return;
+    }
     if (employee == null) {
       System.out.println("\033[1;31m Employee not found with email: " + email + "\033[0m");
     } else {
@@ -81,8 +90,13 @@ public class Main {
         "\033[1;37m ------------------------------- Login --------------------------------\033[0m");
     System.out.print("\033[1;37m Enter Phone Number: \033[0m");
     String phoneNumber = scanner.next();
-
-    Employee employee = employeeService.getEmployeeByPhone(phoneNumber);
+    Employee employee;
+    try {
+      employee = employeeService.getEmployeeByPhone(phoneNumber);
+    } catch (ResourceNotFoundException e) {
+      System.out.println("\033[1;31m " + e.getMessage() + "\033[0m");
+      return;
+    }
     if (employee == null) {
       System.out.println(
           "\033[1;31m Employee not found with phone number: " + phoneNumber + "\033[0m");

@@ -14,7 +14,9 @@ public class EmployeeConstants {
   public static final String DELETE_EMPLOYEE = "DELETE FROM employee WHERE id = ?";
   public static final String SELECT_ALL_EMPLOYEES = "SELECT * FROM employee";
   public static final String SELECT_EMPLOYEE_BY_REPORTS_TO =
-      "SELECT employee_id FROM employee WHERE reports_to = ?";
+      "SELECT id FROM employee WHERE reports_to = ?";
+  public static final String SELECT_EMPLOYEE_BY_REPORTS_TO_ALL_COLUMNS =
+      "SELECT * FROM employee WHERE reports_to = ?";
   public static final String UPDATE_EMPLOYEE_REPORTS_TO =
       "UPDATE employee SET reports_to = ? WHERE id = ?";
   public static final String UPDATE_EMPLOYEE_LEAVE_BALANCE_SICK =

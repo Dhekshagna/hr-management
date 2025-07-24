@@ -30,6 +30,8 @@ public class ManagerPresentation {
     System.out.println("7. View Employee Details");
     System.out.println("8. Logout");
 
+    System.out.println("Enter your choice: ");
+
     int choice = scanner.nextInt();
 
     switch (choice) {
@@ -73,7 +75,7 @@ public class ManagerPresentation {
     System.out.print("Enter End Date (YYYY-MM-DD): ");
     String endDate = scanner.next();
     System.out.print("Enter Reason for Leave: ");
-    String reason = scanner.next();
+    String reason = scanner.nextLine ();
 
     leaveService.applyLeave(
         employee.getId(), LeaveType.valueOf(leaveType), startDate, endDate, reason);
@@ -96,8 +98,8 @@ public class ManagerPresentation {
   public static void viewLeavesByEmployee(Employee employee) {
     System.out.println(
         "Viewing leaves for " + employee.getFirstName() + " " + employee.getLastName());
-    List<Leave> leaves = leaveService.viewLeavesByEmployee(employee.getId());
     try {
+      List<Leave> leaves = leaveService.viewLeavesByEmployee(employee.getId());
       for (Leave leave : leaves) {
         System.out.println(leave);
         System.out.println("-----------------------------");
@@ -108,6 +110,7 @@ public class ManagerPresentation {
   }
 
   public static void cancelLeave(Scanner scanner, Employee employee) {
+    viewLeavesByEmployee (employee);
     System.out.print("Enter Leave ID to cancel: ");
     int leaveId = scanner.nextInt();
     try {
@@ -131,13 +134,13 @@ public class ManagerPresentation {
   }
 
   public static void updateLeaveStatus(Scanner scanner, Employee employee) {
+    leaveService.viewLeavesUnderManager (employee.getId ());
     System.out.print("Enter Leave ID to update: ");
     int leaveId = scanner.nextInt();
     System.out.print("Enter new status (APPROVED, REJECTED): ");
     String status = scanner.next();
     try {
       leaveService.updateLeaveStatus(leaveId, LeaveStatus.valueOf(status), employee.getId());
-      System.out.println("Leave status updated successfully.");
     } catch (ResourceNotFoundException e) {
       System.out.println(e.getMessage());
     }
@@ -147,15 +150,16 @@ public class ManagerPresentation {
     System.out.println(
         "Viewing employees under " + employee.getFirstName() + " " + employee.getLastName());
     // Assuming there's a method in EmployeeService to get employees under a manager
-    List<Employee> employees =
-        employeeService.getEmployeesByManager(employee.getId()); // Placeholder method
-    if (employees.isEmpty()) {
-      System.out.println("No employees found under this manager.");
-    } else {
+    try{
+      List<Employee> employees =
+          employeeService.getEmployeesByManager(employee.getId()); // Placeholder method
       for (Employee emp : employees) {
         System.out.println(emp);
         System.out.println("-----------------------------");
-      }
+    }
+    }catch (ResourceNotFoundException e) {
+      System.out.println(e.getMessage ());
+
     }
   }
 }

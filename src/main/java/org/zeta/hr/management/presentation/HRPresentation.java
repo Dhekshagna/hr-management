@@ -22,7 +22,8 @@ public class HRPresentation {
     System.out.println("3. Apply Leave");
     System.out.println("4. Cancel Leave");
     System.out.println("5. View All Managers");
-    System.out.println("6. Exit");
+    System.out.println("6. View All Employees");
+    System.out.println("7. Exit");
 
     System.out.println("Enter your choice: ");
 
@@ -33,7 +34,7 @@ public class HRPresentation {
         onboardEmployee(scanner);
         break;
       case 2:
-        changeManagerOfEmployee(scanner, employee);
+        changeManagerOfEmployee(scanner);
         break;
       case 3:
         applyLeave(scanner, employee);
@@ -45,6 +46,9 @@ public class HRPresentation {
         viewAllManagers();
         break;
       case 6:
+        viewAllEmployees();
+        break;
+      case 7:
         System.out.println("Exiting HR Management System. Thank you!");
         return;
       default:
@@ -69,11 +73,11 @@ public class HRPresentation {
     System.out.print("Enter Phone Number: ");
     String phone = scanner.next();
     System.out.print("Enter City: ");
-    String city = scanner.next();
+    String city = scanner.nextLine ();
     System.out.print("Enter Locality: ");
-    String locality = scanner.next();
+    String locality = scanner.nextLine ();
     System.out.print("Enter State: ");
-    String state = scanner.next();
+    String state = scanner.nextLine ();
     System.out.print("Enter Pin Code: ");
     String pinCode = scanner.next();
     try {
@@ -93,14 +97,17 @@ public class HRPresentation {
     }
   }
 
-  private static void changeManagerOfEmployee(Scanner scanner, Employee employee) {
+  private static void changeManagerOfEmployee(Scanner scanner) {
     System.out.println(
         "------------------------Change Manager of Employee------------------------");
+    viewAllEmployees ();
+    System.out.println("Enter the employee ID to change manager: ");
+    int employeeId = scanner.nextInt();
     viewAllManagers();
     System.out.print("Enter New Manager ID: ");
     int newManagerId = scanner.nextInt();
     try {
-      employeeService.updateEmployeeReportsTo(employee.getId(), newManagerId);
+      employeeService.updateEmployeeReportsTo(employeeId, newManagerId);
       System.out.println("Manager changed successfully.");
     } catch (Exception e) {
       System.out.println("Error changing manager: " + e.getMessage());
@@ -108,11 +115,20 @@ public class HRPresentation {
   }
 
   private static void viewAllManagers() {
-    System.out.println("------------------------View All Employees------------------------");
+    System.out.println("------------------------View All Managers------------------------");
     try {
       employeeService.getAllManagers().forEach(System.out::println);
     } catch (Exception e) {
       System.out.println("Error fetching employees: " + e.getMessage());
     }
   }
+
+    private static void viewAllEmployees() {
+        System.out.println("------------------------View All Employees------------------------");
+        try {
+          employeeService.viewAllEmployees ().forEach(System.out::println);
+        } catch (Exception e) {
+          System.out.println("Error fetching employees: " + e.getMessage());
+        }
+    }
 }
