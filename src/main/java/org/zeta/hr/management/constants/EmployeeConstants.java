@@ -5,8 +5,7 @@ public class EmployeeConstants {
       "INSERT INTO employee (id, first_name, last_name, role, reports_to, leave_balance,"
           + " sick_leaves, paid_leaves, email_id, phone, city, locality, state, pin_code) VALUES"
           + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  public static final String SELECT_EMPLOYEE_BY_ID =
-      "SELECT * FROM employee WHERE id = ?";
+  public static final String SELECT_EMPLOYEE_BY_ID = "SELECT * FROM employee WHERE id = ?";
   public static final String UPDATE_EMPLOYEE =
       "UPDATE employee SET first_name = ?, last_name = ?, role = ?, reports_to = ?, leave_balance ="
           + " ?, sick_leaves = ?, paid_leaves = ?, email_id = ?, phone = ?, city = ?, locality = ?,"
@@ -23,8 +22,7 @@ public class EmployeeConstants {
       "UPDATE employee SET sick_leaves = ?, leave_balance = ? WHERE" + " id = ?";
   public static final String UPDATE_EMPLOYEE_LEAVE_BALANCE_PAID =
       "UPDATE employee SET paid_leaves = ?, leave_balance = ? WHERE" + " id = ?";
-  public static final String COUNT_ROWS_INSERTED =
-      "SELECT COUNT(*) FROM employee";
+  public static final String COUNT_ROWS_INSERTED = "SELECT COUNT(*) FROM employee";
   public static final String INSERT_CEO_IF_NOT_EXISTS =
       "INSERT INTO employee (id, first_name, last_name, role, reports_to, leave_balance,"
           + " sick_leaves, paid_leaves, email_id, phone, city, locality, state, pin_code)"
@@ -37,10 +35,8 @@ public class EmployeeConstants {
           + " 'Dhekshagna', 'Goli', 'HR', 0, 22, 12, 10, 'dhekshagna@gmail.com', '8097635734',"
           + " 'Hyderabad', 'Kukatpally', 'Telangana', '500072' WHERE NOT EXISTS (SELECT 1 FROM"
           + " employee WHERE role = 'HR')";
-  public static final String SELECT_EMPLOYEE_BY_EMAIL =
-      "SELECT * FROM employee WHERE email_id = ?";
-  public static final String SELECT_EMPLOYEE_BY_PHONE =
-      "SELECT * FROM employee WHERE phone = ?";
+  public static final String SELECT_EMPLOYEE_BY_EMAIL = "SELECT * FROM employee WHERE email_id = ?";
+  public static final String SELECT_EMPLOYEE_BY_PHONE = "SELECT * FROM employee WHERE phone = ?";
   public static final String SELECT_EMPLOYEE_BY_ROLE_MANAGER =
       "SELECT * FROM employee WHERE role = 'MANAGER'";
 }

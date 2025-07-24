@@ -75,7 +75,7 @@ public class ManagerPresentation {
     System.out.print("Enter End Date (YYYY-MM-DD): ");
     String endDate = scanner.next();
     System.out.print("Enter Reason for Leave: ");
-    String reason = scanner.nextLine ();
+    String reason = scanner.nextLine();
 
     leaveService.applyLeave(
         employee.getId(), LeaveType.valueOf(leaveType), startDate, endDate, reason);
@@ -110,7 +110,7 @@ public class ManagerPresentation {
   }
 
   public static void cancelLeave(Scanner scanner, Employee employee) {
-    viewLeavesByEmployee (employee);
+    viewLeavesByEmployee(employee);
     System.out.print("Enter Leave ID to cancel: ");
     int leaveId = scanner.nextInt();
     try {
@@ -134,7 +134,7 @@ public class ManagerPresentation {
   }
 
   public static void updateLeaveStatus(Scanner scanner, Employee employee) {
-    leaveService.viewLeavesUnderManager (employee.getId ());
+    leaveService.viewLeavesUnderManager(employee.getId());
     System.out.print("Enter Leave ID to update: ");
     int leaveId = scanner.nextInt();
     System.out.print("Enter new status (APPROVED, REJECTED): ");
@@ -150,16 +150,15 @@ public class ManagerPresentation {
     System.out.println(
         "Viewing employees under " + employee.getFirstName() + " " + employee.getLastName());
     // Assuming there's a method in EmployeeService to get employees under a manager
-    try{
+    try {
       List<Employee> employees =
           employeeService.getEmployeesByManager(employee.getId()); // Placeholder method
       for (Employee emp : employees) {
         System.out.println(emp);
         System.out.println("-----------------------------");
-    }
-    }catch (ResourceNotFoundException e) {
-      System.out.println(e.getMessage ());
-
+      }
+    } catch (ResourceNotFoundException e) {
+      System.out.println(e.getMessage());
     }
   }
 }

@@ -63,7 +63,7 @@ public class Main {
 
     Employee employee;
     try {
-      employee = employeeService.getEmployeeByEmailId (email);
+      employee = employeeService.getEmployeeByEmailId(email);
     } catch (ResourceNotFoundException e) {
       System.out.println("\033[1;31m " + e.getMessage() + "\033[0m");
       return;

@@ -73,11 +73,11 @@ public class HRPresentation {
     System.out.print("Enter Phone Number: ");
     String phone = scanner.next();
     System.out.print("Enter City: ");
-    String city = scanner.nextLine ();
+    String city = scanner.nextLine();
     System.out.print("Enter Locality: ");
-    String locality = scanner.nextLine ();
+    String locality = scanner.nextLine();
     System.out.print("Enter State: ");
-    String state = scanner.nextLine ();
+    String state = scanner.nextLine();
     System.out.print("Enter Pin Code: ");
     String pinCode = scanner.next();
     try {
@@ -100,7 +100,7 @@ public class HRPresentation {
   private static void changeManagerOfEmployee(Scanner scanner) {
     System.out.println(
         "------------------------Change Manager of Employee------------------------");
-    viewAllEmployees ();
+    viewAllEmployees();
     System.out.println("Enter the employee ID to change manager: ");
     int employeeId = scanner.nextInt();
     viewAllManagers();
@@ -123,12 +123,12 @@ public class HRPresentation {
     }
   }
 
-    private static void viewAllEmployees() {
-        System.out.println("------------------------View All Employees------------------------");
-        try {
-          employeeService.viewAllEmployees ().forEach(System.out::println);
-        } catch (Exception e) {
-          System.out.println("Error fetching employees: " + e.getMessage());
-        }
+  private static void viewAllEmployees() {
+    System.out.println("------------------------View All Employees------------------------");
+    try {
+      employeeService.viewAllEmployees().forEach(System.out::println);
+    } catch (Exception e) {
+      System.out.println("Error fetching employees: " + e.getMessage());
     }
+  }
 }
